@@ -21,6 +21,7 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #0c0a09; /* Cor de fundo principal: um preto espacial */
+            padding-top: 56px; /* Space for the fixed status bar */
         }
         .font-space-mono {
             font-family: 'Space Mono', monospace;
@@ -71,7 +72,7 @@
         }
     </style>
 </head>
-<body class="text-stone-200 pt-16">
+<body class="text-stone-200">
 
     <!-- Status Indicator Bar -->
     <div class="fixed top-0 left-0 right-0 z-[60] flex justify-center p-2 bg-stone-900/80 backdrop-blur-sm border-b border-stone-800">
@@ -99,7 +100,6 @@
             </ul>
         </div>
     </div>
-
 
     <!-- Shopping Cart Icon -->
     <button id="cart-icon" class="fixed top-20 right-6 z-50 bg-lime-400 text-stone-900 w-14 h-14 rounded-full flex items-center justify-center shadow-lg transform hover:scale-110 transition-transform">
@@ -452,8 +452,17 @@
                 const isOpen = !isWednesday && isWithinTime;
                 
                 if (!isOpen) {
-                    closedModal.classList.remove('hidden');
+                    document.getElementById('closed-message-bar').classList.remove('hidden');
                     searchBar.disabled = true;
+                }
+                const statusIndicator = document.getElementById('status-indicator');
+                const statusText = document.getElementById('status-text');
+                if (isOpen) {
+                    statusText.textContent = 'ABERTO';
+                    statusIndicator.classList.add('bg-green-500', 'hover:bg-green-600');
+                } else {
+                    statusText.textContent = 'FECHADO';
+                    statusIndicator.classList.add('bg-red-500', 'hover:bg-red-600');
                 }
                 return isOpen;
             }
@@ -542,15 +551,18 @@
 
                 let cartId = `${itemId}`;
                 let price = itemToAdd.price;
+                let currentFlavor = flavor;
 
                 if (size) {
                     cartId += `-${size}`;
                     price = itemToAdd.prices[size];
                 }
-                if (flavor) {
+                
+                if (itemToAdd.options && flavor){
                     cartId += `-${flavor}`;
                     price = itemToAdd.options[flavor];
                 }
+
                 if (comboSelections) {
                     let selectionsString = '';
                     for (const key in comboSelections) {
@@ -568,7 +580,7 @@
                 if (existingItem) {
                     existingItem.quantity++;
                 } else {
-                    cart.push({ ...itemToAdd, cartId, size, flavor, comboSelections, price, quantity: 1 });
+                    cart.push({ ...itemToAdd, cartId, size, flavor: currentFlavor, comboSelections, price, quantity: 1 });
                 }
                 
                 let itemName = itemToAdd.name;
@@ -632,10 +644,12 @@
                              itemName += ` (Pizza: ${pizzaText}, Refri: ${item.comboSelections.soda})`;
                          }
                     }
+                    
+                    const itemImage = item.images ? (item.images[item.flavor] || Object.values(item.images)[0]) : item.image;
 
                     const cartItemHtml = `
                         <div class="flex items-center gap-4 mb-4">
-                            <img src="${item.images ? item.images[item.flavor] || Object.values(item.images)[0] : item.image}" alt="${item.name}" class="w-16 h-16 rounded-md object-cover">
+                            <img src="${itemImage}" alt="${item.name}" class="w-16 h-16 rounded-md object-cover">
                             <div class="flex-grow">
                                 <h4 class="font-bold text-white">${itemName}</h4>
                                 <p class="text-sm text-stone-400">${formatCurrency(item.price)}</p>
@@ -991,17 +1005,6 @@
             const isOpen = checkBusinessHours();
             renderMenu(isOpen);
             updateCart();
-            const statusText = document.getElementById('status-text');
-            const closedMessageBar = document.getElementById('closed-message-bar');
-            if (isOpen) {
-                statusText.textContent = 'ABERTO';
-                statusIndicator.classList.add('bg-green-500', 'hover:bg-green-600');
-                closedMessageBar.classList.add('hidden');
-            } else {
-                statusText.textContent = 'FECHADO';
-                statusIndicator.classList.add('bg-red-500', 'hover:bg-red-600');
-                closedMessageBar.classList.remove('hidden');
-            }
         });
     </script>
 </body>
