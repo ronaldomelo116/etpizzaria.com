@@ -70,6 +70,10 @@
         .combo-checkbox, .size-radio {
             accent-color: #a3e635;
         }
+        /* Offset for anchor links due to sticky header */
+        .scroll-target {
+            scroll-margin-top: 120px;
+        }
     </style>
 </head>
 <body class="text-stone-200">
@@ -100,6 +104,7 @@
             </ul>
         </div>
     </div>
+
 
     <!-- Shopping Cart Icon -->
     <button id="cart-icon" class="fixed top-20 right-6 z-50 bg-lime-400 text-stone-900 w-14 h-14 rounded-full flex items-center justify-center shadow-lg transform hover:scale-110 transition-transform">
@@ -219,8 +224,17 @@
         <p class="font-bold">NO MOMENTO ESTAMOS FECHADOS. Você pode navegar pelo cardápio, mas os pedidos estão desativados.</p>
     </div>
 
+    <!-- Navigation Menu -->
+    <nav class="bg-stone-900 sticky top-[56px] z-30 py-3 shadow-md shadow-black/20">
+        <div class="container mx-auto px-4">
+            <div id="category-menu" class="flex flex-wrap justify-center gap-2 md:gap-4">
+                <!-- Buttons will be injected by JS -->
+            </div>
+        </div>
+    </nav>
+
     <!-- Search Bar -->
-    <div class="container mx-auto px-4 py-6">
+    <div class="container mx-auto px-4 pt-6">
         <div class="relative">
             <input type="text" id="search-bar" placeholder="Buscar no cardápio..." class="w-full bg-stone-800 border-2 border-stone-700 text-white rounded-lg py-3 pl-12 pr-4 focus:outline-none focus:border-lime-500 focus:ring-1 focus:ring-lime-500 text-lg transition-colors">
             <i class="fa-solid fa-search absolute left-4 top-1/2 -translate-y-1/2 text-stone-400"></i>
@@ -393,6 +407,7 @@
             const minOrderMessage = document.getElementById('min-order-message');
             const cartOverlay = document.getElementById('cart-overlay');
             const cartContent = document.getElementById('cart-content');
+            const categoryMenu = document.getElementById('category-menu');
             
             // --- STATE ---
             let cart = [];
@@ -470,9 +485,19 @@
             // --- RENDER & DISPLAY FUNCTIONS ---
             function renderMenu(isOpen) {
                 menuContainer.innerHTML = '';
+                categoryMenu.innerHTML = '';
+
                 for (const categoryKey in menuData) {
                     const category = menuData[categoryKey];
                     let itemsHtml = '';
+                    
+                    // Render category button for navigation
+                    const navButton = document.createElement('a');
+                    navButton.href = `#${categoryKey}`;
+                    navButton.className = "nav-button px-3 py-1 text-xs font-semibold rounded-full bg-stone-800 hover:bg-lime-500 hover:text-stone-900 transition-colors";
+                    navButton.textContent = category.title;
+                    categoryMenu.appendChild(navButton);
+                    
                     category.items.forEach(item => {
                         const disabledAttribute = isOpen ? '' : 'disabled';
                         const cardClass = 'menu-item-card';
@@ -506,7 +531,7 @@
                     });
 
                     const sectionHtml = `
-                        <section id="${categoryKey}" class="mb-16">
+                        <section id="${categoryKey}" class="scroll-target mb-16">
                             <h2 class="font-space-mono text-3xl md:text-4xl font-bold mb-8 text-center flex items-center justify-center gap-4">
                                 <i class="${category.icon} ${category.color} neon-glow-purple"></i>
                                 ${category.title}
@@ -1000,6 +1025,16 @@
                 }
             });
 
+            categoryMenu.addEventListener('click', (event) => {
+                if (event.target.tagName === 'A') {
+                    event.preventDefault();
+                    const targetId = event.target.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    if (targetSection) {
+                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            });
 
             // --- INITIALIZE ---
             const isOpen = checkBusinessHours();
