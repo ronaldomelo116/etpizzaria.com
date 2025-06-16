@@ -112,12 +112,12 @@
         <!-- Overlay -->
         <div id="cart-overlay" class="absolute inset-0 bg-black/60 opacity-0 transition-opacity duration-300 ease-in-out"></div>
         <!-- Cart Content -->
-        <div id="cart-content" class="relative ml-auto flex flex-col h-full w-full md:w-96 bg-stone-900 transform translate-x-full transition-transform duration-300 ease-in-out pointer-events-auto">
-             <button id="close-cart-btn" class="absolute top-5 right-5 text-stone-400 hover:text-white z-10 bg-stone-800/50 p-2 rounded-full w-10 h-10 flex items-center justify-center">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
-            <div class="p-6 border-b border-stone-700">
+        <div id="cart-content" class="relative ml-auto flex flex-col h-full w-full md:w-96 bg-stone-900 transform translate-x-full transition-transform duration-300 ease-in-out pointer-events-auto pt-14">
+            <div class="p-6 border-b border-stone-700 flex justify-between items-center">
                 <h2 class="font-space-mono text-2xl font-bold text-lime-400 neon-glow">Seu Carrinho</h2>
+                 <button id="close-cart-btn" class="text-stone-400 hover:text-white bg-stone-800/50 rounded-full w-9 h-9 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
             </div>
             <div id="cart-items" class="p-6 flex-grow overflow-y-auto">
                  <p id="empty-cart-message" class="text-stone-400 text-center mt-8">Seu carrinho está vazio.</p>
@@ -144,14 +144,14 @@
     </div>
     
     <!-- Options Modal -->
-    <div id="options-modal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+    <div id="options-modal" class="fixed inset-0 bg-black/80 z-[70] flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
         <div id="options-modal-content" class="bg-stone-900 border border-stone-700 rounded-lg w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl shadow-lime-500/10">
             <!-- Content will be injected by JS -->
         </div>
     </div>
 
     <!-- Checkout Modal -->
-    <div id="checkout-modal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+    <div id="checkout-modal" class="fixed inset-0 bg-black/80 z-[70] flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
         <div class="bg-stone-900 border border-stone-700 rounded-lg w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl shadow-lime-500/10">
             <div class="p-5 border-b border-stone-700 flex justify-between items-center">
                 <h2 class="font-space-mono text-2xl font-bold text-lime-400">Detalhes da Entrega</h2>
@@ -194,7 +194,7 @@
     </div>
     
     <!-- Success Modal -->
-    <div id="success-modal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+    <div id="success-modal" class="fixed inset-0 bg-black/80 z-[100] flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
         <div class="bg-stone-900 border border-lime-500 rounded-lg text-center p-8 max-w-sm shadow-2xl">
             <i class="fa-solid fa-rocket text-6xl text-lime-400 mb-4"></i>
             <h2 class="font-space-mono text-3xl font-bold text-white">Redirecionando...</h2>
@@ -644,7 +644,7 @@
                 const isMinOrderMet = subtotal >= minimumOrderValue;
                 checkoutBtn.disabled = isCartEmpty || !isMinOrderMet;
                 minOrderMessage.classList.toggle('hidden', isCartEmpty || isMinOrderMet);
-                 document.getElementById('view-cart-container').classList.toggle('hidden', isCartEmpty);
+                document.getElementById('view-cart-container').classList.toggle('hidden', isCartEmpty);
             }
             
             function updateCartTotal() {
@@ -718,10 +718,14 @@
                 closeCart();
                 checkoutModal.classList.remove("hidden");
                 setTimeout(() => checkoutModal.classList.remove("opacity-0"), 10);
+                document.getElementById('view-cart-container').classList.add('hidden');
             }
             function closeCheckout() {
                 checkoutModal.classList.add("opacity-0");
                 setTimeout(() => checkoutModal.classList.add("hidden"), 300);
+                if (cart.length > 0) {
+                    document.getElementById('view-cart-container').classList.remove('hidden');
+                }
             }
 
             function openOptionsModal(itemId) {
@@ -829,11 +833,17 @@
                 
                 optionsModal.classList.remove('hidden');
                 setTimeout(() => optionsModal.classList.remove('opacity-0'), 10);
+                document.getElementById('view-cart-container').classList.add('hidden');
             }
 
             function closeOptionsModal() {
                 optionsModal.classList.add('opacity-0');
-                setTimeout(() => optionsModal.classList.add('hidden'), 300);
+                setTimeout(() => {
+                    optionsModal.classList.add('hidden');
+                    if (cart.length > 0) {
+                        document.getElementById('view-cart-container').classList.remove('hidden');
+                    }
+                }, 300);
             }
             
             function handleCheckoutSubmit(event) {
@@ -934,7 +944,7 @@
                 cartSidebar.classList.remove('pointer-events-none');
                 cartOverlay.classList.remove('opacity-0');
                 cartContent.classList.remove('translate-x-full');
-                 document.getElementById('view-cart-container').classList.add('hidden');
+                document.getElementById('view-cart-container').classList.add('hidden');
             };
 
             const closeCart = () => {
