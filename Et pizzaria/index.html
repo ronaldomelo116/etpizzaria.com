@@ -71,22 +71,38 @@
         }
     </style>
 </head>
-<body class="text-stone-200">
+<body class="text-stone-200 pt-16">
 
-    <!-- "Closed" overlay -->
-    <div id="closed-modal" class="fixed inset-0 bg-black/90 z-[100] flex items-center justify-center p-4 hidden">
-        <div class="bg-stone-900 border border-red-500 rounded-lg text-center p-8 max-w-lg shadow-2xl animate-pulse">
-            <i class="fa-solid fa-clock text-6xl text-red-500 mb-4"></i>
-            <h2 class="font-space-mono text-3xl font-bold text-white">Estamos Fechados no Momento</h2>
-            <p class="text-stone-300 mt-4 text-lg">Nosso horário de atendimento é:</p>
-            <p class="text-lime-400 font-bold text-xl mt-2">17:30 às 23:45 (Horário de Brasília)</p>
-            <p class="text-stone-300 mt-2 text-lg">(Todos os dias, exceto Quartas-feiras)</p>
+    <!-- Status Indicator Bar -->
+    <div class="fixed top-0 left-0 right-0 z-[60] flex justify-center p-2 bg-stone-900/80 backdrop-blur-sm border-b border-stone-800">
+         <button id="status-indicator" class="font-bold text-sm text-white px-4 py-1.5 rounded-full shadow-lg transition-colors">
+            <span id="status-text">Verificando...</span>
+            <i class="fa-solid fa-clock ml-2"></i>
+         </button>
+    </div>
+
+    <!-- Operating Hours Modal -->
+    <div id="hours-modal" class="fixed inset-0 bg-black/80 z-[100] flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-stone-900 border border-lime-500 rounded-lg w-full max-w-md shadow-2xl">
+             <div class="p-5 border-b border-stone-700 flex justify-between items-center">
+                <h3 class="font-space-mono text-2xl font-bold text-lime-400">Horário de Funcionamento</h3>
+                <button id="close-hours-modal-btn" class="text-stone-400 hover:text-white text-3xl">×</button>
+            </div>
+            <ul class="p-6 space-y-3 text-lg">
+                <li class="flex justify-between items-center"><span class="text-stone-300">Domingo</span> <span>17:30 - 23:45</span></li>
+                <li class="flex justify-between items-center"><span class="text-stone-300">Segunda-feira</span> <span>17:30 - 23:45</span></li>
+                <li class="flex justify-between items-center"><span class="text-stone-300">Terça-feira</span> <span>17:30 - 23:45</span></li>
+                <li class="flex justify-between items-center"><span class="text-stone-300">Quarta-feira</span> <span class="font-bold text-red-500">Fechado</span></li>
+                <li class="flex justify-between items-center"><span class="text-stone-300">Quinta-feira</span> <span>17:30 - 23:45</span></li>
+                <li class="flex justify-between items-center"><span class="text-stone-300">Sexta-feira</span> <span>17:30 - 23:45</span></li>
+                <li class="flex justify-between items-center"><span class="text-stone-300">Sábado</span> <span>17:30 - 23:45</span></li>
+            </ul>
         </div>
     </div>
 
 
     <!-- Shopping Cart Icon -->
-    <button id="cart-icon" class="fixed top-6 right-6 z-50 bg-lime-400 text-stone-900 w-14 h-14 rounded-full flex items-center justify-center shadow-lg transform hover:scale-110 transition-transform">
+    <button id="cart-icon" class="fixed top-20 right-6 z-50 bg-lime-400 text-stone-900 w-14 h-14 rounded-full flex items-center justify-center shadow-lg transform hover:scale-110 transition-transform">
         <i class="fa-solid fa-cart-shopping text-2xl"></i>
         <span id="cart-count" class="absolute -top-1 -right-1 bg-purple-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center">0</span>
     </button>
@@ -188,7 +204,7 @@
 
 
     <!-- Header -->
-    <header class="text-center py-12 px-4 bg-cover bg-center" style="background-image: url('https://placehold.co/1920x1080/0c0a09/1c1917.png?text=.');">
+    <header class="text-center py-12 px-4 bg-cover bg-center">
         <div class="inline-block bg-stone-900/50 p-6 rounded-full backdrop-blur-sm mb-4">
             <i class="fa-solid fa-earth-americas text-7xl text-lime-400 animate-spin" style="animation-duration: 20s;"></i>
         </div>
@@ -197,6 +213,11 @@
         </h1>
         <p class="mt-4 text-lg text-stone-300">O sabor que vem de outro mundo, direto para sua casa!</p>
     </header>
+    
+    <!-- Closed Message Bar -->
+    <div id="closed-message-bar" class="hidden container mx-auto -mt-4 mb-6 p-4 bg-red-900/50 border border-red-500 text-red-300 text-center rounded-lg">
+        <p class="font-bold">NO MOMENTO ESTAMOS FECHADOS. Você pode navegar pelo cardápio, mas os pedidos estão desativados.</p>
+    </div>
 
     <!-- Search Bar -->
     <div class="container mx-auto px-4 py-6">
@@ -932,7 +953,7 @@
                         showFeedback('Você pode escolher até 2 sabores.', true);
                     }
                 }
-
+                
                 if (event.target.matches('input[name="item-option"]')) {
                     const confirmBtn = optionsModalContent.querySelector('#confirm-options-btn');
                     if(!confirmBtn) return;
@@ -947,10 +968,40 @@
                 }
             });
 
+            const statusIndicator = document.getElementById('status-indicator');
+            const hoursModal = document.getElementById('hours-modal');
+            const closeHoursModalBtn = document.getElementById('close-hours-modal-btn');
+            statusIndicator.addEventListener('click', () => {
+                hoursModal.classList.remove('hidden');
+                setTimeout(() => hoursModal.classList.remove('opacity-0'), 10);
+            });
+            closeHoursModalBtn.addEventListener('click', () => {
+                 hoursModal.classList.add('opacity-0');
+                setTimeout(() => hoursModal.classList.add('hidden'), 300);
+            });
+             hoursModal.addEventListener('click', (event) => {
+                if(event.target === hoursModal) {
+                     hoursModal.classList.add('opacity-0');
+                    setTimeout(() => hoursModal.classList.add('hidden'), 300);
+                }
+            });
+
+
             // --- INITIALIZE ---
             const isOpen = checkBusinessHours();
             renderMenu(isOpen);
             updateCart();
+            const statusText = document.getElementById('status-text');
+            const closedMessageBar = document.getElementById('closed-message-bar');
+            if (isOpen) {
+                statusText.textContent = 'ABERTO';
+                statusIndicator.classList.add('bg-green-500', 'hover:bg-green-600');
+                closedMessageBar.classList.add('hidden');
+            } else {
+                statusText.textContent = 'FECHADO';
+                statusIndicator.classList.add('bg-red-500', 'hover:bg-red-600');
+                closedMessageBar.classList.remove('hidden');
+            }
         });
     </script>
 </body>
