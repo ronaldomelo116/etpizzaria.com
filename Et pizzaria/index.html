@@ -112,12 +112,12 @@
         <!-- Overlay -->
         <div id="cart-overlay" class="absolute inset-0 bg-black/60 opacity-0 transition-opacity duration-300 ease-in-out"></div>
         <!-- Cart Content -->
-        <div id="cart-content" class="absolute top-0 right-0 h-full w-full md:w-96 bg-stone-900 flex flex-col transform translate-x-full transition-transform duration-300 ease-in-out">
-            <div class="p-6 border-b border-stone-700 flex justify-between items-center">
+        <div id="cart-content" class="relative ml-auto flex flex-col h-full w-full md:w-96 bg-stone-900 transform translate-x-full transition-transform duration-300 ease-in-out pointer-events-auto">
+             <button id="close-cart-btn" class="absolute top-5 right-5 text-stone-400 hover:text-white z-10 bg-stone-800/50 p-2 rounded-full w-10 h-10 flex items-center justify-center">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div class="p-6 border-b border-stone-700">
                 <h2 class="font-space-mono text-2xl font-bold text-lime-400 neon-glow">Seu Carrinho</h2>
-                <button id="close-cart-btn" class="text-stone-400 hover:text-white">
-                    <i class="fa-solid fa-xmark text-2xl"></i>
-                </button>
             </div>
             <div id="cart-items" class="p-6 flex-grow overflow-y-auto">
                  <p id="empty-cart-message" class="text-stone-400 text-center mt-8">Seu carrinho está vazio.</p>
@@ -205,9 +205,7 @@
 
     <!-- Header -->
     <header class="text-center py-12 px-4 bg-cover bg-center">
-        <div class="inline-block bg-stone-900/50 p-6 rounded-full backdrop-blur-sm mb-4">
-            <i class="fa-solid fa-earth-americas text-7xl text-lime-400 animate-spin" style="animation-duration: 20s;"></i>
-        </div>
+        <img src="https://raw.githubusercontent.com/ronaldomelo116/etpizzaria.com/refs/heads/main/Et%20pizzaria/img/logo%20vetorizada%20branco%20sem%20fundo.png" alt="Logo ET Pizzaria" class="mx-auto h-24 w-auto mb-4">
         <h1 class="font-space-mono text-5xl md:text-7xl font-bold text-white tracking-widest uppercase">
             ET <span class="text-lime-400 neon-glow">Pizzaria</span>
         </h1>
@@ -401,9 +399,8 @@
             const cartSubtotalEl = document.getElementById('cart-subtotal');
             const cartDeliveryFeeEl = document.getElementById('cart-delivery-fee');
             const cartTotalEl = document.getElementById('cart-total');
-            const cartCountEl = document.getElementById('cart-count');
+            const viewCartBtn = document.getElementById('view-cart-btn');
             const cartSidebar = document.getElementById('cart-sidebar');
-            const cartIcon = document.getElementById('cart-icon');
             const closeCartBtn = document.getElementById('close-cart-btn');
             const emptyCartMessage = document.getElementById('empty-cart-message');
             const checkoutBtn = document.getElementById('checkout-btn');
@@ -937,6 +934,7 @@
                 cartSidebar.classList.remove('pointer-events-none');
                 cartOverlay.classList.remove('opacity-0');
                 cartContent.classList.remove('translate-x-full');
+                 document.getElementById('view-cart-container').classList.add('hidden');
             };
 
             const closeCart = () => {
@@ -945,9 +943,12 @@
                 setTimeout(() => {
                     cartSidebar.classList.add('pointer-events-none');
                 }, 300); 
+                if (cart.length > 0) {
+                    document.getElementById('view-cart-container').classList.remove('hidden');
+                }
             };
             
-            document.getElementById('view-cart-btn').addEventListener('click', openCart);
+            viewCartBtn.addEventListener('click', openCart);
             
             closeCartBtn.addEventListener('click', closeCart);
             cartOverlay.addEventListener('click', closeCart);
