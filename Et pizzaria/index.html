@@ -314,9 +314,14 @@
                     icon: "fa-solid fa-star", 
                     color: "text-pink-400", 
                     items: [
-                        { id: 14, name: "Chocolate com Morango", description: "Chocolate ao leite derretido com morangos frescos fatiados.", prices: { pequena: 32.00, media: 42.00, grande: 52.00 }, image: "https://placehold.co/600x400/f472b6/ffffff?text=Chocolate+e+Morango" },
-                        { id: 15, name: "Banana com Canela", description: "Fatias de banana, açúcar, canela em pó sobre uma base de mussarela.", prices: { pequena: 29.00, media: 39.00, grande: 49.00 }, image: "https://placehold.co/600x400/f472b6/ffffff?text=Banana+e+Canela" },
-                        { id: 16, name: "Romeu e Julieta", description: "A clássica combinação de goiabada cremosa com queijo mussarela.", prices: { pequena: 30.00, media: 40.00, grande: 50.00 }, image: "https://placehold.co/600x400/f472b6/ffffff?text=Romeu+e+Julieta" },
+                        { id: 35, name: "Chocolate", description: "(Muçarela, creme de leite e chocolate ao leite)", prices: { pequena: 22.00, media: 27.00, grande: 36.00 }, image: "https://static.ifood-static.com.br/image/upload/t_medium/pratos/66b29f2b-04c5-4860-b80d-67dd00da7106/202307021439_6AGX_i.jpg" },
+                        { id: 36, name: "Brigadeiro", description: "(Muçarela, creme de leite, chocolate ao leite e granulado)", prices: { pequena: 22.00, media: 28.00, grande: 37.00 }, image: "https://static.ifood-static.com.br/image/upload/t_medium/pratos/66b29f2b-04c5-4860-b80d-67dd00da7106/202307021534_Q241_i.jpg" },
+                        { id: 37, name: "Dois Amores", description: "(Muçarela, creme de leite, chocolate ao leite e chocolate branco)", prices: { pequena: 23.00, media: 28.00, grande: 37.00 }, image: "https://static.ifood-static.com.br/image/upload/t_medium/pratos/66b29f2b-04c5-4860-b80d-67dd00da7106/202307021536_728P_i.jpg" },
+                        { id: 38, name: "Banana com Canela", description: "(Muçarela, creme de leite, banana e canela em pó)", prices: { pequena: 22.00, media: 28.00, grande: 37.00 }, image: "https://static.ifood-static.com.br/image/upload/t_medium/pratos/66b29f2b-04c5-4860-b80d-67dd00da7106/202307021540_LP52_i.jpg" },
+                        { id: 39, name: "Banana Nevada", description: "(Muçarela, creme de leite, banana, canela em pó e chocolate branco)", prices: { pequena: 25.00, media: 30.00, grande: 40.00 }, image: "https://static.ifood-static.com.br/image/upload/t_medium/pratos/66b29f2b-04c5-4860-b80d-67dd00da7106/202307021544_6U6B_i.jpg" },
+                        { id: 40, name: "Cartola", description: "(Muçarela, creme de leite, banana, canela em pó e chocolate ao leite)", prices: { pequena: 22.00, media: 27.00, grande: 36.00 }, image: "https://static.ifood-static.com.br/image/upload/t_medium/pratos/66b29f2b-04c5-4860-b80d-67dd00da7106/202307021548_3788_i.jpg" },
+                        { id: 41, name: "Banana com chocolate", description: "(Muçarela, creme de leite, banana, e chocolate ao leite)", prices: { pequena: 25.00, media: 29.00, grande: 38.00 }, image: "https://static.ifood-static.com.br/image/upload/t_medium/pratos/66b29f2b-04c5-4860-b80d-67dd00da7106/202307021550_IQ56_i.jpg" },
+                        { id: 42, name: "M&Ms", description: "(Muçarela, creme de leite, chocolate ao leite e M&Ms)", prices: { pequena: 23.00, media: 28.00, grande: 36.00 }, image: "https://static.ifood-static.com.br/image/upload/t_medium/pratos/66b29f2b-04c5-4860-b80d-67dd00da7106/202307021541_T8S0_i.jpg" },
                     ] 
                 },
                 bebidas: { 
@@ -324,10 +329,17 @@
                     icon: "fa-solid fa-bottle-water", 
                     color: "text-amber-400", 
                     items: [
-                        { id: 17, name: "Refrigerante em Lata", description: "Escolha seu sabor favorito (350ml).", price: 6.00, image: "https://placehold.co/600x400/fbbf24/ffffff?text=Lata+350ml", flavors: ["Coca-Cola", "Pepsi", "Guaraná"] },
-                        { id: 18, name: "Refrigerante 1L", description: "Escolha seu sabor favorito (1 Litro).", price: 10.00, image: "https://placehold.co/600x400/fbbf24/ffffff?text=Refri+1L", flavors: ["Coca-Cola", "Pepsi", "Guaraná"] },
-                        { id: 19, name: "Água Mineral com Gás", description: "Garrafa 500ml", price: 4.00, image: "https://placehold.co/600x400/fbbf24/ffffff?text=Água+com+Gás" },
-                        { id: 20, name: "Água Mineral sem Gás", description: "Garrafa 500ml", price: 3.50, image: "https://placehold.co/600x400/fbbf24/ffffff?text=Água+sem+Gás" },
+                        { id: 17, name: "Refrigerante em Lata (350ml)", description: "Escolha seu sabor favorito.", options: {"Coca-Cola": 5.00, "Pepsi": 4.50, "Guaraná": 4.50}, images: {
+                            "Coca-Cola": "https://d2nagnwby8accc.cloudfront.net/companies/products/images/150/09d3b2a6-e766-4da6-a30b-692a9ae6bc9a.png",
+                            "Pepsi": "https://d2nagnwby8accc.cloudfront.net/companies/products/images/150/b58c9a1f-622c-41e6-bed3-82970a8406c0.png",
+                            "Guaraná": "https://d2nagnwby8accc.cloudfront.net/companies/products/images/150/4e92faee-915a-4cb7-874e-11bf2870978b.png"
+                        }},
+                        { id: 18, name: "Refrigerante 1L", description: "Escolha seu sabor favorito.", options: {"Coca-Cola": 8.00, "Pepsi": 6.50, "Guaraná": 6.50}, images: {
+                             "Coca-Cola": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/820af392-002c-47b1-bfae-d7ef31743c7f/202312051703_i9mf59ukfbl.jpg",
+                             "Pepsi": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/820af392-002c-47b1-bfae-d7ef31743c7f/202210180733_vcu5ahqdn5m.jpg",
+                             "Guaraná": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/820af392-002c-47b1-bfae-d7ef31743c7f/202210190235_7yak7flqtt9.jpg"
+                        }},
+                        { id: 19, name: "Água Mineral", description: "Escolha sua preferência.", options: {"Com Gás": 3.00, "Sem Gás": 2.00}, image: "https://static.ifood-static.com.br/image/upload/t_medium/pratos/66b29f2b-04c5-4860-b80d-67dd00da7106/202307021431_8Y2N_i.jpg" },
                     ] 
                 }
             };
@@ -435,16 +447,28 @@
                         const disabledAttribute = isOpen ? '' : 'disabled';
                         const cardClass = 'menu-item-card';
                         
+                        let priceDisplay;
+                        if(item.prices) {
+                            priceDisplay = formatCurrency(item.prices.media);
+                        } else if (item.options) {
+                             const firstOptionPrice = Object.values(item.options)[0];
+                             priceDisplay = formatCurrency(firstOptionPrice);
+                        } else {
+                            priceDisplay = formatCurrency(item.price);
+                        }
+                        
+                        const defaultImage = item.images ? Object.values(item.images)[0] : item.image;
+
                         itemsHtml += `
                             <div class="${cardClass} bg-stone-800/50 rounded-lg overflow-hidden flex flex-col shadow-lg hover:shadow-lime-500/10 transition-shadow duration-300" data-item-id="${item.id}">
-                                <img src="${item.image}" alt="${item.name}" class="w-full h-40 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1c1917/a3e635?text=Imagem+Indisponível';">
-                                <div class="p-4 flex flex-col flex-grow">
-                                    <h3 class="text-xl font-bold text-white">${item.name}</h3>
-                                    <p class="text-stone-400 mt-2 flex-grow">${item.description}</p>
-                                    <div class="flex justify-between items-center mt-auto pt-4">
-                                        <span class="text-2xl font-space-mono font-bold ${category.color}">${formatCurrency(item.price || item.prices?.media)}</span>
-                                        <button class="add-to-cart-btn bg-lime-400 text-stone-900 font-bold px-4 py-2 rounded-md hover:bg-lime-300 transition-colors" data-id="${item.id}" ${disabledAttribute}>
-                                            <i class="fa-solid fa-plus mr-2"></i>Adicionar
+                                <img src="${defaultImage}" alt="${item.name}" class="w-full h-32 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1c1917/a3e635?text=Imagem+Indisponível';">
+                                <div class="p-3 flex flex-col flex-grow">
+                                    <h3 class="text-lg font-bold text-white">${item.name}</h3>
+                                    <p class="text-sm text-stone-400 mt-1 flex-grow">${item.description}</p>
+                                    <div class="flex justify-between items-center mt-auto pt-2">
+                                        <span class="text-xl font-space-mono font-bold ${category.color}">${priceDisplay}</span>
+                                        <button class="add-to-cart-btn bg-lime-400 text-stone-900 font-bold px-3 py-1.5 text-sm rounded-md hover:bg-lime-300 transition-colors" data-id="${item.id}" ${disabledAttribute}>
+                                            <i class="fa-solid fa-plus mr-1"></i>Adicionar
                                         </button>
                                     </div>
                                 </div>
@@ -457,7 +481,7 @@
                                 <i class="${category.icon} ${category.color} neon-glow-purple"></i>
                                 ${category.title}
                             </h2>
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">${itemsHtml}</div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">${itemsHtml}</div>
                         </section>`;
                     menuContainer.innerHTML += sectionHtml;
                 }
@@ -502,7 +526,10 @@
                     cartId += `-${size}`;
                     price = itemToAdd.prices[size];
                 }
-                if (flavor) cartId += `-${flavor}`;
+                if (flavor) {
+                    cartId += `-${flavor}`;
+                    price = itemToAdd.options[flavor];
+                }
                 if (comboSelections) {
                     let selectionsString = '';
                     for (const key in comboSelections) {
@@ -587,7 +614,7 @@
 
                     const cartItemHtml = `
                         <div class="flex items-center gap-4 mb-4">
-                            <img src="${item.image}" alt="${item.name}" class="w-16 h-16 rounded-md object-cover">
+                            <img src="${item.images ? item.images[item.flavor] || Object.values(item.images)[0] : item.image}" alt="${item.name}" class="w-16 h-16 rounded-md object-cover">
                             <div class="flex-grow">
                                 <h4 class="font-bold text-white">${itemName}</h4>
                                 <p class="text-sm text-stone-400">${formatCurrency(item.price)}</p>
@@ -628,10 +655,10 @@
                             <div>
                                 <h4 class="text-lg font-bold text-stone-300">Escolha o tamanho:</h4>
                                 <div id="pizza-size-options" class="grid grid-cols-1 gap-2 mt-2">
-                                    ${Object.keys(item.prices).map(size => `
+                                    ${Object.keys(item.prices).map((size, index) => `
                                         <div>
                                             <label class="flex items-center space-x-3 p-3 rounded-lg border border-stone-700 hover:bg-stone-800">
-                                                <input type="radio" name="pizza-size" value="${size}" class="size-radio h-5 w-5" ${size === 'media' ? 'checked' : ''}>
+                                                <input type="radio" name="pizza-size" value="${size}" class="size-radio h-5 w-5" ${index === 1 ? 'checked' : ''}>
                                                 <span class="flex-grow">${capitalize(size)}</span>
                                                 <span class="font-mono">${formatCurrency(item.prices[size])}</span>
                                             </label>
@@ -675,15 +702,25 @@
                     }
                 }
                  // Flavor options for simple drinks
-                else if (item.flavors) {
+                else if (item.options) {
                      optionsHtml = `
-                        <div class="space-y-2">
-                            <h4 class="text-lg font-bold text-stone-300">Escolha o Sabor:</h4>
-                            <select id="modal-flavor-selector" class="form-input w-full">
-                                ${item.flavors.map(flavor => `<option value="${flavor}">${flavor}</option>`).join('')}
-                            </select>
-                        </div>
-                     `;
+                        <div class="space-y-4">
+                             ${item.images ? `<div class="text-center"><img id="modal-item-image" src="${Object.values(item.images)[0]}" class="mx-auto h-32 rounded-lg object-contain"></div>` : ''}
+                            <div>
+                                <h4 class="text-lg font-bold text-stone-300">Escolha uma opção:</h4>
+                                <div id="item-options-list" class="grid grid-cols-1 gap-2 mt-2">
+                                    ${Object.keys(item.options).map((option, index) => `
+                                        <div>
+                                            <label class="flex items-center space-x-3 p-3 rounded-lg border border-stone-700 hover:bg-stone-800">
+                                                <input type="radio" name="item-option" value="${option}" class="size-radio h-5 w-5" ${index === 0 ? 'checked' : ''} data-price="${item.options[option]}" data-image-src="${item.images ? item.images[option] : ''}">
+                                                <span class="flex-grow">${capitalize(option)}</span>
+                                                <span class="font-mono">${formatCurrency(item.options[option])}</span>
+                                            </label>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>`;
                 }
                 
                 optionsModalContent.innerHTML = `
@@ -763,7 +800,7 @@
                 if (button.classList.contains("add-to-cart-btn")) {
                     const itemId = parseInt(button.dataset.id);
                     const itemToAdd = findItemById(itemId);
-                    if (itemToAdd.configurable || itemToAdd.prices || itemToAdd.flavors) {
+                    if (itemToAdd.configurable || itemToAdd.prices || itemToAdd.options) {
                         openOptionsModal(itemId);
                     } else {
                          addToCart({ itemId });
@@ -847,8 +884,13 @@
                             return;
                         }
                         options.size = selectedSize.value;
-                    } else if(itemToAdd.flavors && !itemToAdd.configurable) { // It's a simple drink
-                        options.flavor = optionsModalContent.querySelector('#modal-flavor-selector').value;
+                    } else if(itemToAdd.options) { 
+                        const selectedOption = optionsModalContent.querySelector('input[name="item-option"]:checked');
+                         if (!selectedOption) {
+                            showFeedback('Por favor, escolha uma opção.', true);
+                            return;
+                        }
+                        options.flavor = selectedOption.value;
                     } else if (itemToAdd.configurable) { // It's a combo
                         if (itemToAdd.comboType === 'galaxy') {
                             const savoryCheckboxes = optionsModalContent.querySelectorAll('.combo-checkbox-savory:checked');
@@ -888,6 +930,19 @@
                     if (checkedCheckboxes.length > 2) {
                         event.target.checked = false;
                         showFeedback('Você pode escolher até 2 sabores.', true);
+                    }
+                }
+
+                if (event.target.matches('input[name="item-option"]')) {
+                    const confirmBtn = optionsModalContent.querySelector('#confirm-options-btn');
+                    if(!confirmBtn) return;
+                    
+                    const itemId = parseInt(confirmBtn.dataset.id);
+                    const item = findItemById(itemId);
+                    const selectedFlavor = event.target.value;
+                    const modalImage = optionsModalContent.querySelector('#modal-item-image');
+                    if (modalImage && item.images && item.images[selectedFlavor]) {
+                        modalImage.src = item.images[selectedFlavor];
                     }
                 }
             });
