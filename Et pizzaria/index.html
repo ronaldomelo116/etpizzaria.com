@@ -73,15 +73,15 @@
         }
         /* Offset for anchor links due to sticky header */
         .scroll-target {
-            scroll-margin-top: 120px;
+            scroll-margin-top: 100px;
         }
     </style>
 </head>
 <body class="text-stone-200">
 
     <!-- Status Indicator Bar -->
-    <div class="fixed top-0 left-0 right-0 z-[60] flex justify-center p-2 bg-stone-900/80 backdrop-blur-sm border-b border-stone-800">
-         <button id="status-indicator" class="font-bold text-sm text-white px-4 py-1.5 rounded-full shadow-lg transition-colors">
+    <div class="fixed top-0 left-0 right-0 z-[60] flex justify-center p-2">
+         <button id="status-indicator" class="font-bold text-xs px-3 py-1 rounded-full shadow-lg transition-colors">
             <span id="status-text">Verificando...</span>
             <i class="fa-solid fa-clock ml-2"></i>
          </button>
@@ -108,12 +108,12 @@
 
 
     <!-- Shopping Cart Sidebar -->
-    <div id="cart-sidebar" class="fixed inset-0 z-40 pointer-events-none">
+    <div id="cart-sidebar" class="fixed inset-0 z-50 pointer-events-none">
         <!-- Overlay -->
         <div id="cart-overlay" class="absolute inset-0 bg-black/60 opacity-0 transition-opacity duration-300 ease-in-out"></div>
         <!-- Cart Content -->
-        <div id="cart-content" class="relative ml-auto flex flex-col h-full w-full md:w-96 bg-stone-900 transform translate-x-full transition-transform duration-300 ease-in-out pointer-events-auto pt-14">
-            <div class="p-6 border-b border-stone-700 flex justify-between items-center">
+        <div id="cart-content" class="relative ml-auto flex flex-col h-full w-full md:w-96 bg-stone-900 transform translate-x-full transition-transform duration-300 ease-in-out pointer-events-auto">
+            <div class="p-5 flex justify-between items-center border-b border-stone-700 sticky top-0 bg-stone-900 z-10">
                 <h2 class="font-space-mono text-2xl font-bold text-lime-400 neon-glow">Seu Carrinho</h2>
                  <button id="close-cart-btn" class="text-stone-400 hover:text-white bg-stone-800/50 rounded-full w-9 h-9 flex items-center justify-center">
                     <i class="fa-solid fa-xmark text-xl"></i>
@@ -218,7 +218,7 @@
     </div>
 
     <!-- Navigation Menu -->
-    <nav class="bg-stone-900 sticky top-[56px] z-30 py-2 shadow-md shadow-black/20">
+    <nav class="bg-stone-900 sticky top-[44px] z-30 py-2 shadow-md shadow-black/20">
         <div class="container mx-auto px-4">
             <div id="category-menu" class="flex flex-wrap justify-center gap-2 md:gap-3">
                 <!-- Buttons will be injected by JS -->
@@ -412,7 +412,6 @@
             const paymentMethodEl = document.getElementById('payment-method');
             const trocoSectionEl = document.getElementById('troco-section');
             const successModal = document.getElementById('success-modal');
-            const closedModal = document.getElementById('closed-modal');
             const searchBar = document.getElementById('search-bar');
             const noResultsMessage = document.getElementById('no-results-message');
             const minOrderMessage = document.getElementById('min-order-message');
@@ -585,7 +584,7 @@
 
             // --- CART LOGIC ---
             function addToCart(options) {
-                const { itemId, size, flavor, comboSelections, halfAndHalfSelections } = options;
+                const { itemId, size, flavor, comboSelections, halfAndHalfSelections, crust } = options;
                 const itemToAdd = findItemById(itemId);
                 if (!itemToAdd) return;
 
@@ -618,19 +617,26 @@
                     cartId += `-${halfAndHalfSelections.flavors.sort().join('-')}`;
                     price = halfAndHalfSelections.price;
                 }
+                
+                if (crust && crust.price > 0) {
+                    price += crust.price;
+                    cartId += `-${crust.name.replace(/\s/g, '-')}`;
+                }
+
 
                 const existingItem = cart.find(item => item.cartId === cartId);
                 
                 if (existingItem) {
                     existingItem.quantity++;
                 } else {
-                    cart.push({ ...itemToAdd, cartId, size, flavor: currentFlavor, comboSelections, halfAndHalfSelections, price, quantity: 1 });
+                    cart.push({ ...itemToAdd, cartId, size, flavor: currentFlavor, comboSelections, halfAndHalfSelections, price, quantity: 1, crust });
                 }
                 
                 let itemName = itemToAdd.name;
                 if (size && !itemToAdd.isHalfAndHalf) itemName += ` (${capitalize(size)})`;
                 if (flavor) itemName += ` (${flavor})`;
                 if (halfAndHalfSelections) itemName = `${itemToAdd.name} (${halfAndHalfSelections.flavors.join(' / ')})`;
+                if (crust && crust.name !== "SEM BORDA") itemName += ` com Borda de ${crust.name.replace('Borda ','')}`;
 
                 showFeedback(`'${itemName}' adicionado!`);
                 updateCart();
@@ -690,22 +696,25 @@
                              itemName += ` (Pizza: ${pizzaText}, Refri: ${item.comboSelections.soda})`;
                          }
                     }
+                    if (item.crust && item.crust.name !== "SEM BORDA") {
+                        itemName += ` com Borda de ${item.crust.name.replace('Borda ','')}`;
+                    }
                     
                     const itemImage = item.images ? (item.images[item.flavor] || Object.values(item.images)[0]) : item.image;
 
                     const cartItemHtml = `
-                        <div class="flex items-center gap-4 mb-4">
-                            <img src="${itemImage}" alt="${item.name}" class="w-16 h-16 rounded-md object-cover">
+                        <div class="flex items-center gap-3 mb-4">
+                            <img src="${itemImage}" alt="${item.name}" class="w-14 h-14 rounded-md object-cover">
                             <div class="flex-grow">
-                                <h4 class="font-bold text-white">${itemName}</h4>
-                                <p class="text-sm text-stone-400">${formatCurrency(item.price)}</p>
+                                <h4 class="font-bold text-white text-sm">${itemName}</h4>
+                                <p class="text-xs text-stone-400">${formatCurrency(item.price)}</p>
                             </div>
-                            <div class="flex items-center gap-3">
-                               <button class="quantity-change text-stone-400 hover:text-white" data-cart-id="${item.cartId}" data-change="-1">-</button>
-                               <span class="font-bold text-lg text-white">${item.quantity}</span>
-                               <button class="quantity-change text-stone-400 hover:text-white" data-cart-id="${item.cartId}" data-change="1">+</button>
+                            <div class="flex items-center gap-2">
+                               <button class="quantity-change text-stone-400 hover:text-white w-6 h-6 flex items-center justify-center" data-cart-id="${item.cartId}" data-change="-1">-</button>
+                               <span class="font-bold text-base text-white">${item.quantity}</span>
+                               <button class="quantity-change text-stone-400 hover:text-white w-6 h-6 flex items-center justify-center" data-cart-id="${item.cartId}" data-change="1">+</button>
                             </div>
-                            <span class="font-bold w-20 text-right text-lime-400">${formatCurrency(item.price * item.quantity)}</span>
+                            <span class="font-bold text-sm w-16 text-right text-lime-400">${formatCurrency(item.price * item.quantity)}</span>
                             <button class="remove-from-cart text-red-500 hover:text-red-400" data-cart-id="${item.cartId}"><i class="fa-solid fa-trash"></i></button>
                         </div>`;
                     cartItemsContainer.innerHTML += cartItemHtml;
@@ -722,17 +731,43 @@
             }
             function closeCheckout() {
                 checkoutModal.classList.add("opacity-0");
-                setTimeout(() => checkoutModal.classList.add("hidden"), 300);
-                if (cart.length > 0) {
-                    document.getElementById('view-cart-container').classList.remove('hidden');
-                }
+                setTimeout(() => {
+                    checkoutModal.classList.add("hidden");
+                     if(cart.length > 0) {
+                        document.getElementById('view-cart-container').classList.remove('hidden');
+                    }
+                }, 300);
             }
 
             function openOptionsModal(itemId) {
                 const item = findItemById(itemId);
                 if (!item) return;
 
+                const stuffedCrustOptions = {
+                    "SEM BORDA": 0.00, "Borda Requeijão": 5.00, "Borda Cheddar": 5.00,
+                    "Borda Chocolate": 10.00, "Borda Catupiry Original": 10.00, "Borda Cream cheese Original": 9.00
+                };
                 let optionsHtml = '';
+                let crustHtml = '';
+
+                if(item.prices || item.isHalfAndHalf || item.configurable) {
+                    crustHtml = `
+                        <div class="mt-4">
+                            <h4 class="text-lg font-bold text-stone-300">Deseja borda recheada?</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                                ${Object.entries(stuffedCrustOptions).map(([name, price], index) => `
+                                    <div>
+                                        <label class="flex items-center space-x-3 p-3 rounded-lg border border-stone-700 hover:bg-stone-800">
+                                            <input type="radio" name="crust-option" value="${name}" class="size-radio h-5 w-5" ${index === 0 ? 'checked' : ''} data-price="${price}">
+                                            <span class="flex-grow">${name}</span>
+                                            <span class="font-mono">+ ${formatCurrency(price)}</span>
+                                        </label>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>`;
+                }
+                
                 if (item.isHalfAndHalf) {
                     const allPizzas = [...menuData.espaciais.items, ...menuData.tradicionais.items, ...menuData.doces.items];
                     const flavorOptions = allPizzas.map(p => {
@@ -741,63 +776,21 @@
                         }
                         return '';
                     }).join('');
-                     optionsHtml = `
-                        <div class="space-y-4">
-                             <div>
-                                <h4 class="text-lg font-bold text-stone-300">Escolha até 2 sabores para a pizza ${capitalize(item.size)}:</h4>
-                                <div class="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 mt-2">${flavorOptions}</div>
-                            </div>
-                        </div>`;
+                     optionsHtml = `<div class="space-y-4"><div><h4 class="text-lg font-bold text-stone-300">Escolha até 2 sabores para a pizza ${capitalize(item.size)}:</h4><div class="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 mt-2">${flavorOptions}</div></div>${crustHtml}</div>`;
 
                 } else if (item.prices) {
-                    optionsHtml = `
-                        <div class="space-y-4">
-                            <div>
-                                <h4 class="text-lg font-bold text-stone-300">Escolha o tamanho:</h4>
-                                <div id="pizza-size-options" class="grid grid-cols-1 gap-2 mt-2">
-                                    ${Object.keys(item.prices).map((size, index) => `
-                                        <div>
-                                            <label class="flex items-center space-x-3 p-3 rounded-lg border border-stone-700 hover:bg-stone-800">
-                                                <input type="radio" name="pizza-size" value="${size}" class="size-radio h-5 w-5" ${index === 1 ? 'checked' : ''}>
-                                                <span class="flex-grow">${capitalize(size)}</span>
-                                                <span class="font-mono">${formatCurrency(item.prices[size])}</span>
-                                            </label>
-                                        </div>
-                                    `).join('')}
-                                </div>
-                            </div>
-                        </div>`;
+                    optionsHtml = `<div class="space-y-4"><div><h4 class="text-lg font-bold text-stone-300">Escolha o tamanho:</h4><div id="pizza-size-options" class="grid grid-cols-1 gap-2 mt-2">${Object.keys(item.prices).map((size, index) => `<div><label class="flex items-center space-x-3 p-3 rounded-lg border border-stone-700 hover:bg-stone-800"><input type="radio" name="pizza-size" value="${size}" class="size-radio h-5 w-5" ${index === 1 ? 'checked' : ''}><span class="flex-grow">${capitalize(size)}</span><span class="font-mono">${formatCurrency(item.prices[size])}</span></label></div>`).join('')}</div></div>${crustHtml}</div>`;
                 }
                 else if (item.configurable) {
                      if (item.comboType === 'galaxy') {
-                        const savoryOptions = item.savoryFlavors.map(f => `<div><label class="flex items-center space-x-2"><input type="checkbox" class="combo-checkbox combo-checkbox-savory" value="${f}" data-item-id="${item.id}"><span>${f}</span></label></div>`).join('');
-                        const sweetOptions = item.sweetFlavors.map(f => `<div><label class="flex items-center space-x-2"><input type="checkbox" class="combo-checkbox combo-checkbox-sweet" value="${f}" data-item-id="${item.id}"><span>${f}</span></label></div>`).join('');
-                        optionsHtml = `
-                            <div class="space-y-4">
-                                <div>
-                                    <h4 class="text-lg font-bold text-stone-300">Pizza Salgada (G) - Escolha até 2 sabores:</h4>
-                                    <div class="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 mt-2">${savoryOptions}</div>
-                                </div>
-                                <div>
-                                    <h4 class="text-lg font-bold text-stone-300">Pizza Doce (P) - Escolha até 2 sabores:</h4>
-                                    <div class="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 mt-2">${sweetOptions}</div>
-                                </div>
-                            </div>`;
+                        const savoryOptions = item.savoryFlavors.map(f => `<div><label class="flex items-center space-x-2"><input type="checkbox" class="combo-checkbox combo-checkbox-savory" value="${f}"><span>${f}</span></label></div>`).join('');
+                        const sweetOptions = item.sweetFlavors.map(f => `<div><label class="flex items-center space-x-2"><input type="checkbox" class="combo-checkbox combo-checkbox-sweet" value="${f}"><span>${f}</span></label></div>`).join('');
+                        optionsHtml = `<div class="space-y-4"><div><h4 class="text-lg font-bold text-stone-300">Pizza Salgada (G) - Escolha até 2 sabores:</h4><div class="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 mt-2">${savoryOptions}</div></div><div><h4 class="text-lg font-bold text-stone-300">Pizza Doce (P) - Escolha até 2 sabores:</h4><div class="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 mt-2">${sweetOptions}</div></div>${crustHtml}</div>`;
                     } else if (item.comboType === 'comet' || item.comboType === 'mini') {
                         const pizzaSize = item.comboType === 'comet' ? 'G' : 'P';
-                        const pizzaOptions = item.pizzaFlavors.map(f => `<div><label class="flex items-center space-x-2"><input type="checkbox" class="combo-checkbox combo-checkbox-pizza" value="${f}" data-item-id="${item.id}"><span>${f}</span></label></div>`).join('');
+                        const pizzaOptions = item.pizzaFlavors.map(f => `<div><label class="flex items-center space-x-2"><input type="checkbox" class="combo-checkbox combo-checkbox-pizza" value="${f}"><span>${f}</span></label></div>`).join('');
                         const sodaOptions = item.sodaFlavors.map(f => `<option value="${f}">${f}</option>`).join('');
-                        optionsHtml = `
-                            <div class="space-y-4">
-                                <div>
-                                    <h4 class="text-lg font-bold text-stone-300">Pizza (${pizzaSize}) - Escolha até 2 sabores:</h4>
-                                    <div class="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 mt-2">${pizzaOptions}</div>
-                                </div>
-                                <div>
-                                    <h4 class="text-lg font-bold text-stone-300">Refrigerante:</h4>
-                                    <select name="soda" id="modal-soda-flavor-${item.id}" class="form-input !mt-1 w-full">${sodaOptions}</select>
-                                </div>
-                            </div>`;
+                        optionsHtml = `<div class="space-y-4"><div><h4 class="text-lg font-bold text-stone-300">Pizza (${pizzaSize}) - Escolha até 2 sabores:</h4><div class="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 mt-2">${pizzaOptions}</div></div>${crustHtml}<div><h4 class="text-lg font-bold text-stone-300">Refrigerante:</h4><select name="soda" id="modal-soda-flavor-${item.id}" class="form-input !mt-1 w-full">${sodaOptions}</select></div></div>`;
                     }
                 }
                 else if (item.options) {
@@ -871,6 +864,9 @@
                              const pizzaText = item.comboSelections.pizza.join(' / ');
                              itemName += `\n   - Pizza: ${pizzaText}\n   - Refri: ${item.comboSelections.soda}`;
                          }
+                    }
+                    if(item.crust && item.crust.name !== "SEM BORDA") {
+                        itemName += `\n   - Borda: ${item.crust.name}`;
                     }
                     return `- ${item.quantity}x ${itemName} (${formatCurrency(item.price * item.quantity)})`;
                 }).join('\n');
@@ -979,6 +975,12 @@
                     const itemId = parseInt(button.dataset.id);
                     const itemToAdd = findItemById(itemId);
                     let options = { itemId };
+                    
+                    const selectedCrust = optionsModalContent.querySelector('input[name="crust-option"]:checked');
+                    if(selectedCrust){
+                       options.crust = { name: selectedCrust.value, price: parseFloat(selectedCrust.dataset.price) };
+                    }
+
 
                     if (itemToAdd.isHalfAndHalf) {
                         const flavorCheckboxes = optionsModalContent.querySelectorAll('.half-and-half-flavor:checked');
